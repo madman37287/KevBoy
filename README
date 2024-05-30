@@ -1,0 +1,51 @@
+What is the KevBoy?
+
+In its current state, the KevBoy is a breadboard prototype of a handheld RPI based retro gaming system using the retropie image.
+ADD IMAGE
+
+The KevBoy is a 
+
+What is the purpose of making this public git repository?
+
+1. Back-up data.  This project already had to be re-designed from scratch once in the past due to a laptop harddrive failure.  
+2. Some SW and HW lack a large number of examples or documentation on the web. I hope this repository and documentation can assist with someone else's learning.
+3. Method of showing off the project to any interested parties.
+
+
+What has already been implemented within the KevBoy?
+
+As previously mentioned, the KevBoy currently has a breadboard prototype shown in the image below.
+ADD IMAGE
+
+The breadboard design has 3 visible layers to it.  In the bottom layer, we have the controls.
+These controls match what you would expect from a standard controller:
+* D-Pad on the far left
+* A, B, X, Y buttons on the far right
+* Two analog sticks
+* select (left) and start (right) buttons in between the analog sticks.
+
+INSERT DIAGRAM
+
+There is also an MCP3008 ADC between the analog sticks that convert the analog voltage outputted from the x and y axis potentiometers into a digital code readable by the PI.
+
+The layer above the controls lives the necessary electrical components needed to connect the controls to the GPIO pins.  
+In this layer we have LEDs acting only as Diodes.  These diodes are necessary due to the button matrix solution used to reduce the number of GPIO pins used from 16 to 8.
+Without the diodes, multiple button presses can lead to an unpressed button being incorrectly registered (see below)
+
+INSERT DIAGRAM
+
+In its current prototype state, the PI currently has 11 connected buttons (including L3 on the DS3 analog), while the final will support at least 16 when adding R3 and the Triggers.
+With several other devices needing to be connected to the GPIO pins, such as ADC, PWM speakers, UPS UART connections, ect, there are simply not enough pins.
+The HW/SW solution was to build a button matrix, in which 16 buttons could be supported with 8 pins.
+
+
+What still needs to be implemented?
+
+* Upgrade to RPI5 (expecting CM5 to release later this year. CM4 to CM5 will not require PCB changes)
+* Battery solution for RPI5 (5V 5A max compared to RPI4 5V 3A)
+* PCB updates & PCB prototype
+* 3D printable model for casing
+* digitally controllable potentiometers for volume control
+* code to support WIFI and Bluetooth status display. Perhaps also an airplane mode.
+* Unit cooling
+
