@@ -1,0 +1,7 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "cm4conn")(type "KiCad")(uri "${KIPRJMOD}/Libraries/CM4/CM4IO.pretty/CM4IO.3dshapes/cm4conn.kicad_sym")(options "")(descr ""))
+  (lib (name "oldlibraries")(type "Legacy")(uri "C:/Users/kevin/Documents/KiCad/7.0/libloaderLibs/SamacSys_Parts.lib")(options "")(descr ""))
+  (lib (name "cm4devlibs")(type "KiCad")(uri "${KIPRJMOD}/Libraries/CM4/CM4IO.kicad_sym")(options "")(descr ""))
+  (lib (name "libloader")(type "KiCad")(uri "C:/Users/kevin/Documents/KiCad/7.0/libloaderLibs/SamacSys_Parts.kicad_sym")(options "")(descr ""))
+)
