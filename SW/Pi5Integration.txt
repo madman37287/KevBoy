@@ -1,0 +1,40 @@
+Notes about Pi5:
+GPIO interface has changed.  RPi.GPIO library no longer supported.  gpiozero library should be supported by both 4 and 5.
+Because of the GPIO interface change, LEDs had to be switched with real diodes.  This is because the voltage drop across the LEDs were too large, which caused buttons to not register.
+
+MCP3008 library lives within gpiozero, making life significantly easier.  Threshold values had to change.
+
+PWM audio is no longer supported on the Pi 5.  Because of this, the PWM speakers must be switched to the I2S digital audio output.
+
+HDMI automatic resolution detection is not as automatic as rpi developers say.  This is likely due to the HDMI backpack's non-standard resolution.  Config variable must be set to allow 800x480 resolution.
+
+
+Retropie not fully configured to pi 5 yet.  Manual install required: 
+
+Slashscreens not yet supported on Retropie for pi 5
+
+Max overclock:
+arm_freq = 2800
+gpu_freq = 1000
+
+
+Accidentally had RPi 4 power supply connected to Pi5 before overclock.  This means that max current draw is likely not exceeding UPS threshold values.  USB-C multimeter has been ordered to perform tests.
+
+
+dolphin emulator setup:
+open dolphin config with:
+nano /opt/retropie/configs/gc/emulators.cfg
+
+add line:
+dolphin-editor = "XINIT-WMC:/opt/retropie/emulators/dolphin/bin/dolphin-emu"
+
+file should end looking like:
+dolphin = "XINIT-WM:/opt/retropie/emulators/dolphin/bin/dolphin-emu-nogui -e %ROM%"
+dolphin-gui = "XINIT-WM:/opt/retropie/emulators/dolphin/bin/dolphin-emu -b -e %ROM%"
+dolphin-editor = "XINIT-WMC:/opt/retropie/emulators/dolphin/bin/dolphin-emu"
+default = "dolphin-gui"
+
+To set up controls, press a button on game startup and switch dolphin to the dolphin editor.
+using mouse and keyboard, click the controller option and set up kevboy controls
+
+hotkey exit: https://www.reddit.com/r/emulation/comments/b4mjvu/quitting_dolphin_with_a_gamepad/
