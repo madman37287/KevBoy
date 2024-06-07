@@ -31,10 +31,14 @@ buttonA      = 0
 buttonB      = 0
 buttonX      = 0
 buttonY      = 0
-buttonL      = 0
-buttonR      = 0
+buttonL3     = 0
+buttonR3     = 0
 buttonSel    = 0
 buttonStart  = 0
+buttonL1     = 0
+buttonL2     = 0
+buttonR1     = 0
+buttonR2     = 0
 leftAnalogX  = 0
 leftAnalogY  = 0
 rightAnalogX = 0
@@ -49,25 +53,33 @@ buttonACnt     = 0
 buttonBCnt     = 0
 buttonXCnt     = 0
 buttonYCnt     = 0
-buttonLCnt     = 0
-buttonRCnt     = 0
+buttonL3Cnt    = 0
+buttonR3Cnt    = 0
 buttonSelCnt   = 0
 buttonStartCnt = 0
+buttonL1Cnt    = 0
+buttonL2Cnt    = 0
+buttonR1Cnt    = 0
+buttonR2Cnt    = 0
 
 # initializing controller events
 capabilities = {e.EV_SYN: [], 
-                e.EV_KEY: [e.BTN_A,      # A/east Button (switch inspired design)
-                           e.BTN_B,      # B/south Button (switch inspired design)
-                           e.BTN_X,      # X/north Button (switch inspired design)
-                           e.BTN_Y,      # Y/west Button (switch inspired design)
-                           e.BTN_TOP,    # D-PAD up
-                           e.BTN_TOP2,   # D-PAD left
-                           e.BTN_PINKIE, # D-PAD right
-                           e.BTN_BASE,   # D-PAD down
-                           e.BTN_SELECT, # Select button
-                           e.BTN_START,  # Start Button
-                           e.BTN_TL,     # L1 Button
-                           e.BTN_TR],    # R1 Button
+                e.EV_KEY: [e.BTN_A,       # A/east Button (switch inspired design)
+                           e.BTN_B,       # B/south Button (switch inspired design)
+                           e.BTN_X,       # X/north Button (switch inspired design)
+                           e.BTN_Y,       # Y/west Button (switch inspired design)
+                           e.BTN_TOP,     # D-PAD up
+                           e.BTN_TOP2,    # D-PAD left
+                           e.BTN_PINKIE,  # D-PAD right
+                           e.BTN_BASE,    # D-PAD down
+                           e.BTN_SELECT,  # Select button
+                           e.BTN_START,   # Start Button
+                           e.BTN_THUMBL,  # L3 Button
+                           e.BTN_THUMBR,  # R3 Button
+                           e.BTN_TL,      # L1 Button
+                           e.BTN_TL2,     # L2 Button
+                           e.BTN_TR,      # R1 Button
+                           e.BTN_TR2],    # R2 Button
                 e.EV_ABS: [(e.ABS_X, AbsInfo(0, -1000, 1000, 0, 0, 0)),  # Left analog stick X-axis
                            (e.ABS_Y, AbsInfo(0, -1000, 1000, 0, 0, 0)),  # Left analog stick Y-axis
                            (e.ABS_RX, AbsInfo(0, -1000, 1000, 0, 0, 0)), # Right analog stick X-axis
@@ -92,6 +104,7 @@ GPIO24 = Button(24, pull_up=False)
 GPIO17 = LED(17)
 GPIO27 = LED(27)
 GPIO22 = LED(22)
+GPIO4  = LED(4)
 
 # Set up ADC channels
 chan1 = MCP3008(channel=0)
@@ -102,7 +115,7 @@ chan4 = MCP3008(channel=3)
 try:
     # TODO: Tie printouts to a verbose flag
     #print("_____________________________________________________________________________________________________________________________")
-    #print("| dUp | Lft | right | dwn | A | B | X | Y | Sel | Start | L | R | Left AnalogY | Left AnalogX | RightAnalogY | RightAnalogX |")
+    #print("| dUp | Lft | right | dwn | A | B | X | Y | Sel | Start | L1 | L2 | R1 | R2 | Left AnalogY | Left AnalogX | RightAnalogY | RightAnalogX |")
     #print("-----------------------------------------------------------------------------------------------------------------------------")
     counter = 0
     startTime = time.time()
@@ -112,7 +125,7 @@ try:
         if counter == 10000:
             latency = (time.time()-startTime)/counter
             startTime = time.time()
-            print(f'latency = {latency} sec | frequency = {1/latency} Hz')
+            #print(f'latency = {latency} sec | frequency = {1/latency} Hz')
             # TODO: tie button error resolution to the latency
             #btnErrTime = 0.0005
             #btnErrResolution = int(btnErrTime/latency)
@@ -221,20 +234,20 @@ try:
             buttonStartCnt += 1
 
         if GPIO6.is_pressed:
-            buttonL = 1
-            buttonLCnt = 0
-        elif buttonLCnt >= BUTTON_ERROR_RESOLUTION:
-            buttonL = 0
+            buttonL3 = 1
+            buttonL3Cnt = 0
+        elif buttonL3Cnt >= BUTTON_ERROR_RESOLUTION:
+            buttonL3 = 0
         else:
-            buttonLCnt += 1
+            buttonL3Cnt += 1
 
         if GPIO24.is_pressed:
-            buttonR = 1
-            buttonRCnt = 0
-        elif buttonRCnt >= BUTTON_ERROR_RESOLUTION:
-            buttonR = 0
+            buttonR3 = 1
+            buttonR3Cnt = 0
+        elif buttonR3Cnt >= BUTTON_ERROR_RESOLUTION:
+            buttonR3 = 0
         else:
-            buttonRCnt += 1
+            buttonR3Cnt += 1
         GPIO22.off()
         #############################################
 
@@ -243,8 +256,44 @@ try:
         # (assuming R2/L2 are not analog)
         #############################################
         #############################################
+        # Start, Select, R1, L1 (soon to be R3, L3)
+        #############################################
+        GPIO4.on()
+        if GPIO23.is_pressed:
+            buttonL1 = 1
+            buttonL1Cnt = 0
+        elif buttonL1Cnt >= BUTTON_ERROR_RESOLUTION:
+            buttonL1 = 0
+        else:
+            buttonL1Cnt += 1
 
-        #print("|__" + str(dUp) + "__|__" + str(dLeft) + "__|___" + str(dRight) + "___|__" + str(dDown) + "__|_" + str(buttonA) + "_|_" + str(buttonB) + "_|_" + str(buttonX) + "_|_" + str(buttonY) + "_|__" + str(buttonSel) + "__|___" + str(buttonStart) + "___|_" + str(buttonL) + "_|_" + str(buttonR) + "_|____" + str(leftAnalogY).zfill(6) + "____|____" + str(leftAnalogX).zfill(6) + "____|____" + str(rightAnalogY).zfill(6) + "____|____" + str(rightAnalogX).zfill(6) + "____|", end='\r')
+        if GPIO5.is_pressed:
+            buttonL2 = 1
+            buttonL2Cnt = 0
+        elif buttonL2Cnt >= BUTTON_ERROR_RESOLUTION:
+            buttonL2 = 0
+        else:
+            buttonL2Cnt += 1
+
+        if GPIO6.is_pressed:
+            buttonR1 = 1
+            buttonR1Cnt = 0
+        elif buttonR1Cnt >= BUTTON_ERROR_RESOLUTION:
+            buttonR1 = 0
+        else:
+            buttonR1Cnt += 1
+
+        if GPIO24.is_pressed:
+            buttonR2 = 1
+            buttonR2Cnt = 0
+        elif buttonR2Cnt >= BUTTON_ERROR_RESOLUTION:
+            buttonR2 = 0
+        else:
+            buttonR2Cnt += 1
+        GPIO4.off()
+        #############################################
+
+        #print("|__" + str(dUp) + "__|__" + str(dLeft) + "__|___" + str(dRight) + "___|__" + str(dDown) + "__|_" + str(buttonA) + "_|_" + str(buttonB) + "_|_" + str(buttonX) + "_|_" + str(buttonY) + "_|__" + str(buttonSel) + "__|___" + str(buttonStart) + "___|_" + str(buttonL1) + "__|_" + str(buttonL2) + "__|_" + str(buttonR1) + "__|_" + str(buttonR2) + "__|____" + str(leftAnalogY).zfill(6) + "____|____" + str(leftAnalogX).zfill(6) + "____|____" + str(rightAnalogY).zfill(6) + "____|____" + str(rightAnalogX).zfill(6) + "____|", end='\r')
 
         #############################################
         # Left Analog Values
@@ -287,13 +336,18 @@ try:
         ui.write(e.EV_KEY, e.BTN_Y, buttonY)         # West Button up/down
         ui.write(e.EV_KEY, e.BTN_SELECT, buttonSel)  # Select Button up/down
         ui.write(e.EV_KEY, e.BTN_START, buttonStart) # Start Button up/down
-        ui.write(e.EV_KEY, e.BTN_TL, buttonL)        # L1 Button up/down
-        ui.write(e.EV_KEY, e.BTN_TR, buttonR)        # R1 Button up/down
+        ui.write(e.EV_KEY, e.BTN_TL, buttonL1)       # L1 Button up/down
+        ui.write(e.EV_KEY, e.BTN_TL2, buttonL2)      # L1 Button up/down
+        ui.write(e.EV_KEY, e.BTN_THUMBL, buttonL3)   # L1 Button up/down
+        ui.write(e.EV_KEY, e.BTN_TR, buttonR1)       # R1 Button up/down
+        ui.write(e.EV_KEY, e.BTN_TR2, buttonR2)      # R1 Button up/down
+        ui.write(e.EV_KEY, e.BTN_THUMBR, buttonR3)   # R1 Button up/down
         ui.syn()
 except Exception as e:
     print(e)
     GPIO17.off()
     GPIO27.off()
     GPIO22.off()
+    GPIO4.off()
     exit("Something went horribly wrong")      
 sys.exit(0)
