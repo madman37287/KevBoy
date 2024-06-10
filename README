@@ -49,3 +49,8 @@ What still needs to be implemented?
 * code to support WIFI and Bluetooth status display. Perhaps also an airplane mode.
 * Unit cooling
 
+
+Setup:
+
+Sound:
+https://learn.adafruit.com/adafruit-max98357-i2s-class-d-mono-amp/raspberry-pi-usage
